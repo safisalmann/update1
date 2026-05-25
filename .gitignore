@@ -1,0 +1,36 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+*.log
+logs/
+
+# Temporary scratch files
+parse_questions.py
+parse_questions.js
+parse_questions.ps1

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedQuiz Prep - Medical Admission MCQ Interactive System</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Premium interactive MCQ preparation system for Bangladeshi Medical Admission Tests (MAT). Practice Biology, Chemistry, Physics, English, and GK with customizable options and negative marking calculations.">
+  <meta name="keywords" content="Medical Admission Test, Bangladesh, Medical Admission Prep, MCQ Quiz Bangla, Medical Exam Practice, Biology, Chemistry, Physics, GK, English">
+  
+  <!-- OpenGraph Card -->
+  <meta property="og:title" content="MedQuiz Prep - Medical Admission MCQ Interactive System">
+  <meta property="og:description" content="Elite exam preparation system featuring configurable tests, real medical proportions, negative markings, detailed review explanations, and progress metrics.">
+  <meta property="og:type" content="website">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside>
+    <div class="logo-container">
+      <div class="logo-icon">🩺</div>
+      <div class="logo-text">MedQuiz Prep</div>
+    </div>
+    
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-item active" id="nav-dashboard">
+          <a onclick="window.location.hash = '#dashboard'">
+            <span>🏠</span> Dashboard
+          </a>
+        </li>
+        <li class="nav-item" id="nav-chapterwise">
+          <a onclick="window.location.hash = '#chapterwise'">
+            <span>📖</span> Chapterwise Prep
+          </a>
+        </li>
+        <li class="nav-item" id="nav-paperwise">
+          <a onclick="window.location.hash = '#paperwise'">
+            <span>📄</span> Paperwise Prep
+          </a>
+        </li>
+        <li class="nav-item" id="nav-subjectwise">
+          <a onclick="window.location.hash = '#subjectwise'">
+            <span>🧬</span> Subjectwise Prep
+          </a>
+        </li>
+        <li class="nav-item" id="nav-mat-prep">
+          <a onclick="window.location.hash = '#mat-prep'">
+            <span>🔬</span> MAT Mock Test
+          </a>
+        </li>
+        <li class="nav-item" id="nav-custom-prep">
+          <a onclick="window.location.hash = '#custom-prep'">
+            <span>⚙️</span> Custom Prep
+          </a>
+        </li>
+        <li class="nav-item" id="nav-achievements">
+          <a onclick="window.location.hash = '#achievements'">
+            <span>🏆</span> Achievements
+          </a>
+        </li>
+
+        <!-- Developer Panel with unread badge -->
+        <li class="nav-item" id="nav-developer">
+          <a onclick="window.location.hash = '#developer'" style="position: relative;">
+            <span>🛠️</span> Developer Panel
+            <span class="nav-badge" id="nav-report-badge" style="display:none;">0</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div>MedQuiz Engine v1.1</div>
+      <div>Medical Admission Prep 2026</div>
+    </div>
+  </aside>
+
+  <!-- App Main Workspace -->
+  <main>
+    <header>
+      <div class="header-title" id="view-title">Dashboard</div>
+      <div class="header-actions">
+        <!-- Streak Indicator -->
+        <div class="streak-badge" title="Daily Practice Streak">
+          <span>🔥</span> <span id="header-streak">0</span> Days
+        </div>
+        
+        <!-- XP Indicator -->
+        <div class="xp-badge" title="Total XP Earned">
+          <span>⭐</span> <span id="header-xp">0</span> XP
+        </div>
+        
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Theme">
+          🌙
+        </button>
+      </div>
+    </header>
+
+    <div class="container" id="main-view-slot">
+      <!-- Views are dynamically loaded here -->
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL QUIZ CONFIG MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="quiz-config-modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-config-title">Exam Settings</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('quiz-config-modal').style.display = 'none';">×</button>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Number of Questions</label>
+        <select class="form-select" id="config-q-count">
+          <option value="10">10 Questions</option>
+          <option value="20" selected>20 Questions</option>
+          <option value="50">50 Questions</option>
+          <option value="100">100 Questions</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Time Limit</label>
+        <select class="form-select" id="config-time">
+          <option value="5">5 Minutes</option>
+          <option value="15" selected>15 Minutes</option>
+          <option value="30">30 Minutes</option>
+          <option value="60">60 Minutes</option>
+        </select>
+      </div>
+      
+      <div class="form-group" style="flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 0;">
+        <label class="form-label" style="display: flex; flex-direction: column;">
+          <span>Negative Marking (-0.25)</span>
+          <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">Deduct 0.25 marks per wrong answer</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="config-negative-marking">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <button class="btn-primary" id="start-quiz-btn">Start Preparation Exam</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       REPORT QUESTION MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="report-modal" style="display: none;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">⚠️ Report a Problem</h3>
+        <button class="modal-close-btn" id="report-modal-close">×</button>
+      </div>
+
+      <!-- Question preview -->
+      <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; font-family: var(--font-bangla); font-size: 14px; color: var(--text-muted); line-height: 1.5; max-height: 90px; overflow: hidden; text-overflow: ellipsis;" id="report-question-preview">
+        <!-- question text injected here -->
+      </div>
+
+      <!-- Category selection -->
+      <div class="form-group">
+        <label class="form-label">Select Problem Category <span style="color: var(--danger);">*</span></label>
+        <div id="report-category-list" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Optional comment -->
+      <div class="form-group">
+        <label class="form-label">Additional Comment <span style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+        <textarea class="parser-input-textarea" id="report-comment" style="min-height: 80px; resize: vertical;" placeholder="Describe the problem in detail..."></textarea>
+      </div>
+
+      <button class="btn-primary" id="report-submit-btn" style="background: var(--danger); box-shadow: 0 0 20px rgba(239,68,68,0.25);">
+        Submit Report
+      </button>
+      <div id="report-success-msg" style="display:none; text-align:center; color: var(--accent); font-weight: 600; padding: 10px 0;">
+        ✅ Report submitted successfully. Thank you!
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
